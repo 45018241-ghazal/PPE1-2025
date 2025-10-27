@@ -6,6 +6,7 @@
 - Je prépare la première modification locale (Exercise 2.c)
 
 Exercice 1 : lire les lignes d’un fichier en bash
+
 Réponse 1 — Pourquoi ne pas utiliser cat?
 La commande cat sert seulement à afficher le contenu d’un fichier. Ici, on veut lire le fichier ligne par ligne pour pouvoir faire des traitements sur chaque ligne.Avec while read -r line; do ... done < fichier, on peut lire chaque ligne directement et utiliser les variables dans le script.
 
