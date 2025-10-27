@@ -30,7 +30,7 @@ le script affiche un message d’erreur et s’arrête (exit 1).
 Réponse 3 — Comment afficher le numéro de ligne avant chaque URL ?
 On utilise une variable compteur:
 n=0
-while IFS= read -r line; do
+while read -r line; do
   [ -z "$line" ] && continue
   n=$((n+1))
   echo -e "$n\t$url"
