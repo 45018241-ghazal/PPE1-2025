@@ -1,32 +1,37 @@
 #!/usr/bin/env bash
 
-
 #  Validation des arguments
-
-if [ "$#" -ne 2 ]; then
-  echo "usage: $0 <fichier_urls_entree> <fichier_sortie_tsv>" >&2
+if [ $# -ne 2 ]; then
+  echo "Ce programme demande deux arguments : 1 fichier d'entrée contenant des urls et 1 fichier sortie"
   exit 1
 fi
 
-FICHIER_URLS="$1"
-FICHIER_SORTIE="$2"
+FICHIER_URLS=$1
+FICHIER_HTML=$2
 
 if [ ! -f "$FICHIER_URLS" ]; then
-  echo "error: file not found: $FICHIER_URLS" >&2
+  echo "Ce programme demande un fichier d'entrée valide"
   exit 1
 fi
 
-# Génération du tableau TSV
 
 (
-  # Ligne d'en-tête
-  echo -e "Numero\tAdresse\tCode_HTTP\tEncodage\tNombre_mots"
-
   NB_LIGNE=0
 
-    #  Boucle sur les URLs
+  #  En-tête HTML + début du tableau
+  cat <<'EOF'
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <table>
+      <tr><th>Numero</th><th>Adresse</th><th>ReponseRequete</th><th>EncodageEnUTF8</th><th>NombreDeMots</th></tr>
+EOF
+
+  #  Boucle sur les URLs
   while IFS= read -r LINE; do
-    # ignorer les lignes vides
+    # Ignorer les lignes vides
     [ -z "$LINE" ] && continue
 
     #Normaliser l’URL
@@ -41,26 +46,24 @@ fi
     [[ $URL =~ ^https?:// ]] || continue
 
       NB_LIGNE=$((NB_LIGNE + 1))
-      URL="$LINE"
 
       # récupération du code + content-type
-      CODE_ET_ENCODAGE=$(curl -s -L -i -o "tmp.txt" -w "%{http_code}\n%{content_type}" "$URL")
+      CODE_ET_ENCODAGE=$(curl -s -L -i -o "tmp.txt" -w "%{http_code}\n%{content_type}" "$LINE")
 
       # extraction du code HTTP
       CODE=$(echo "$CODE_ET_ENCODAGE" | head -n 1)
 
-      # Si erreur réseau
+      # Si il y a une erreur réseau, écrire une ligne d'erreur
       if [ "$CODE" -eq 0 ]; then
-        printf '%d\t%s\tERREUR\tERREUR\tERREUR\n' "$NB_LIGNE" "$URL"
+        printf '      <tr><td>%d</td><td>%s</td><td>ERREUR</td><td>ERREUR</td><td>ERREUR</td></tr>\n' \
+          "$NB_LIGNE" "$LINE"
         continue
       fi
 
-      # extraction du charset proprement
-      CTYPE=$(echo "$CODE_ET_ENCODAGE" | tail -n 1)
-      ENCODAGE=$(echo "$CTYPE" | grep -E -o "charset=[^;[:space:]]*" | cut -d= -f2)
-      [ -z "$ENCODAGE" ] && ENCODAGE="-"
+      # extraction du charset
+      ENCODAGE=$(echo "$CODE_ET_ENCODAGE" | grep -E -o "charset=.*")
 
-    # Vérifie si c'est de l'UTF-8
+      # Vérifie si c'est de l'UTF-8
       if [[ "$ENCODAGE" =~ UTF-8|utf-8 ]]; then
         ENCODAGE_OU_PAS="OUI"
       else
@@ -68,19 +71,22 @@ fi
       fi
 
       # Nombre de mots
-      NB_MOTS=$(lynx -dump -stdin -nolist < "tmp.txt" 2>/dev/null | wc -w | tr -d ' ')
+      NB_MOTS=$(lynx -dump -stdin -nolist < "tmp.txt" | wc -w)
 
-      # ligne tabulaire TSV
-      printf '%d\t%s\t%s\t%s\t%s\n' \
-        "$NB_LIGNE" "$URL" "$CODE" "$ENCODAGE_OU_PAS" "$NB_MOTS"
-
+      # Ligne du tableau HTML
+      printf '      <tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' \
+        "$NB_LIGNE" "$LINE" "$CODE" "$ENCODAGE_OU_PAS" "$NB_MOTS"
 
   done < "$FICHIER_URLS"
 
   # supprimer le fichier temporaire
   rm -f tmp.txt
 
-) > "$FICHIER_SORTIE"
+  # fin du tableau et de la page HTML
+  cat <<'EOF'
+    </table>
+  </body>
+</html>
+EOF
 
-
-column -t -s $'\t' "$FICHIER_SORTIE"
+) > "$FICHIER_HTML"
