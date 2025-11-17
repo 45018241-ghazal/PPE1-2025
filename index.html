@@ -1,46 +1,64 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Mini-projet PPE1-2025</title>
-</head>
-<body>
-  <h1>Projet de Programmation Encadré 1</h1>
-          <div>
-          <div>
-            <div>
-              <h3>Miniprojet</h3>
-              <p>
-                Ce miniprojet nous a servi d’exercice pour nous familiariser avec les outils et les méthodes dont nous aurons besoin pour le projet final. À chaque séance, nous avons enrichi le programme étape par étape.
-              </p>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mini-projet PPE1-2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-          <div>
-            <div>
-              <h3>Comment le miniprojet a été construit</h3>
-              <p>Le travail s’est fait en plusieurs étapes :</p>
-              <ol>
-                <li>Créer un programme qui lit une liste d’adresses, affiche la réponse du serveur, l’encodage et le nombre de mots de chaque page.</li>
-                <li>Organiser toutes ces données dans un tableau.</li>
-                <li>Faire en sorte que le programme génère un fichier HTML contenant ce tableau.</li>
-                <li>Appliquer la mise en forme avec Bulma pour avoir une présentation plus propre.</li>
-                <li>Publier la page finale sur GitHub.</li>
-              </ol>
-            </div>
-          </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/versions/bulma-no-dark-mode.min.css">
+  </head>
 
-          <div>
-            <div>
-              <h3>Accès rapide</h3>
-              <p>
-                Vous pouvez consulter directement le tableau de résultats :
-              </p>
-              <p>
-                <a href="miniprojet/tableaux/tableau-fr.html">Voir le tableau </a>
-              </p>
-            </div>
+  <body>
+    <section class="section has-background-grey">
+      <div class="container has-background-white">
+		<div class="hero has-text-centered">
+          <div class="hero-body">
+            <h1 class="title">
+              Projet de Programmation Encadré 1
+            </h1>
           </div>
         </div>
-</body>
+		
+		<nav class="tabs is-centered">
+          <ul>
+            <li class="is-active"><a href="3_index_bulma.html">Accueil</a></li>
+            <li><a href="miniprojet/programmes/miniprojet.sh">Scripts</a></li>
+            <li><a href="miniprojet/tableaux/tableau-fr.html">Tableaux</a></li>
+          </ul>
+        </nav>
+		
+		<div class="columns is-centered">
+			<div class="column is-half">
+				
+				<div class="block content">
+					<h3 class="title is-3 has-text-white has-background-info">Miniprojet</h3>
+					<p>Ce miniprojet nous a servi d’exercice pour nous familiariser avec les outils et les méthodes dont nous aurons besoin pour le projet final. À chaque séance, nous avons enrichi le programme étape par étape.</p>
+				</div>
+				
+				<div class="block content">
+					<h3 class="title is-3 has-text-white has-background-info">Comment le miniprojet a été construit</h3>
+					<p>Le projet se construit selon différentes étapes :</p>
+					<ol >
+						<li>Créer un programme qui lit une liste d’adresses, affiche la réponse du serveur, l’encodage et le nombre de mots de chaque page.</li>
+						<li>Organiser toutes ces données dans un tableau.</li>
+						<li>Faire en sorte que le programme génère un fichier HTML contenant ce tableau.</li>
+						<li>Appliquer la mise en forme avec Bulma pour avoir une présentation plus propre.</li>
+						<li>Publier la page finale sur GitHub.</li>
+					</ol>
+				</div>
+
+				<div class="block content">
+					<h3 class="title is-3 has-text-white has-background-info">Accès rapide</h3>
+					<p>Vous pouvez consulter directement le tableau de résultats :</p>
+					<p>
+						<a class="button is-link" href="miniprojet/tableaux/tableau-fr.html">Voir le tableau</a>
+					</p>
+				</div>				
+				
+			</div>
+		</div>
+
+      </div>
+    </section>
+  </body>
 </html>
